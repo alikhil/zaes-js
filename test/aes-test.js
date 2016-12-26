@@ -10,7 +10,7 @@ describe("aes", () => {
         it("should generate key with given length", () => {
             function test(length) {
                 let key = aes.generateKey(length);
-                expect(key).length.to.be.eq(length);
+                expect(key).to.have.length.is(length);
             }
             test(16);
             test(24);
@@ -19,7 +19,7 @@ describe("aes", () => {
 
         it("should throw error on passing length different than allowed(16, 24 and 32 bytes)", () => {
             function test(length) {
-                assert.throws(() => aes.generateKey(length), Error, "invalid key size");
+                assert.throws(() => aes.generateKey(length), Error, "invalid key length");
             }
             test(5);
             test(7);
