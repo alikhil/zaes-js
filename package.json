@@ -1,0 +1,23 @@
+{
+  "name": "zaes-js",
+  "version": "1.0.0",
+  "description": "AES encryption/decryption library",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel-core/register"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alikhil/zaes-js.git"
+  },
+  "keywords": [
+    "aes",
+    "encryption"
+  ],
+  "author": "Alik Khilazhev <alikhil@mail.ru> (https://github.com/alikhil)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alikhil/zaes-js/issues"
+  },
+  "homepage": "https://github.com/alikhil/zaes-js#readme"
+}
