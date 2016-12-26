@@ -4,6 +4,7 @@ const chai = require("chai");
 const aes = require("../src/aes");
 const expect = chai.expect;
 const assert = chai.assert;
+const utils = require("../src/utils.js");
 
 describe("aes", () => {
     describe("generateKey(length)", () => {
@@ -33,15 +34,16 @@ describe("aes", () => {
             assert.throws(() => aes.encrypt("data", "1515"), Error, "invalid key length");
         });
 
-        it("should encrypt string of any length with given key that will decryptable by decrypt() function", () => {
+        it("should encrypt array of bytes of any length with given key that will decryptable by decrypt() function", () => {
             function test(str, key) {
-                let encrypted = aes.encrypt(str, key);
+                let bytes = utils.bytesToString(str);
+                let encrypted = aes.encrypt(bytes, key);
                 let decrypted = aes.decrypt(encrypted, key);
-                expect(decrypted).to.be.equal(str);
+                expect(decrypted).to.be.eql(bytes);
             }
             test("1337");
             test("русские буквы");
-            test("•Ý¹mÙO_‼|s¬¹Íе£—I♠f⌂5▓");
+            //test("•Ý¹mÙO_‼|s¬¹Íе£—I♠f⌂5▓");
             test("aaaaaaaa$aaaaaaaaaaaaa3abbbbbbt59bbbbbbbbbbbbbbb5)bbbbccccccc_ccccccc");
         });
     });
