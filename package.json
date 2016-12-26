@@ -14,6 +14,9 @@
     "codacy-coverage": "^2.0.0",
     "mocha": "^3.1.2"
   },
+  "dependencies": {
+    "secure-random": "^1.1.1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alikhil/zaes-js.git"
