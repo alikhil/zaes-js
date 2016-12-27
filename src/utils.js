@@ -28,7 +28,7 @@ function bytesToUTF8(bytes) {
  * @param encoding encoding of given string. default is "utf8"
  * @returns Array of bytes
  */
-function stringToBytes(str, encoding="utf8") {
+export function stringToBytes(str, encoding="utf8") {
     switch(encoding.toLowerCase()) {
         case "utf8":
             return utf8ToBytes(str);
@@ -43,16 +43,11 @@ function stringToBytes(str, encoding="utf8") {
  * @param encoding Encoding of output string. Default is "utf8"
  * @returns string in given encoding
  */
-function bytesToString(bytes, encoding="utf8") {
+export function bytesToString(bytes, encoding="utf8") {
     switch(encoding.toLowerCase()) {
         case "utf8":
             return bytesToUTF8(bytes);
         default:
             throw new Error(`Converting from bytes to string with encoding ${encoding} not implemented yet`);
     }
-}
-
-module.exports = {
-    stringToBytes,
-    bytesToString
 }
