@@ -1,28 +1,6 @@
 "use strict";
 
 /**
- * Simply converts string to bytes with String.charCodeAt function
- */
-function utf8ToBytes(str) {
-	let bytes = new Array(str.length);
-	for (let i = 0; i < bytes.length; i++) {
-		bytes[i] = str.charCodeAt(i);
-	}
-	return bytes;
-}
-
-/**
- * Simply converts bytes to utf8 string using String.fromCharCode function
- */
-function bytesToUTF8(bytes) {
-	let str = "";
-	for (let i = 0; i < bytes.length; i++) {
-		str += String.fromCharCode(bytes[i]);
-	}
-	return str;
-}
-
-/**
  * Converts string where each char coded with passed number of bytes, to array of bytes
  * @param str String that need to be converted
  * @param bytesPerChar Encoding setting. Number of bytes per character.
@@ -30,12 +8,20 @@ function bytesToUTF8(bytes) {
  * @returns Array of bytes
  */
 export function stringToBytes(str, bytesPerChar = 1) {
-	switch(bytesPerChar) {
-	case 1:
-		return utf8ToBytes(str);
-	default:
-		throw new Error(`Converting string from ${bytesPerChar} to bytes not implemented yet`);
+	let bytes = [];
+	for (let i = 0; i < str.length; i++) {
+		let char = str.charCodeAt(i);
+		let stack = [];
+		for (let j = 0; j < bytesPerChar; j++) {
+			let byte = char & 255;
+			stack.push(byte);
+			char = char >> 8;
+		}
+		while(stack.length !== 0) {
+			bytes.push(stack.pop());
+		}
 	}
+	return bytes;
 } 
 
 /**
@@ -46,10 +32,37 @@ export function stringToBytes(str, bytesPerChar = 1) {
  * @returns string with passed encoding settings
  */
 export function bytesToString(bytes, bytesPerChar = 1) {
-	switch(bytesPerChar) {
-	case 1:
-		return bytesToUTF8(bytes);
-	default:
-		throw new Error(`Converting from bytes to string where char is ${bytesPerChar} bytes, not implemented yet`);
+	let str = "";
+	let iter = 0;
+	let strLength = bytes.length / bytesPerChar;
+	for (let i = 0; i < strLength; i++) {
+		let charCode = 0;
+		for (let j = 0; j < bytesPerChar; j++) {
+			charCode = (charCode << 8) + bytes[iter];
+			iter++;
+		}
+		str = str + String.fromCharCode(charCode);
 	}
+	return str;
+}
+
+
+/**
+ * Detects number of bytes per char needed to code passed string.
+ * Result can be used as param for bytesToString or stringToBytes
+ * @param str String that need to scan
+ * @returns int number of bytes that needs to code each character
+ */
+export function detectBytesPerChar(str) {
+	let maxBytes = 0;
+	for (let i = 0; i < str.length; i++) {
+		let code = str.charCodeAt(i);
+		let charLength = 1;
+		while (code > 255) {
+			code = code >> 8;
+			charLength++;
+		}
+		maxBytes = Math.max(maxBytes, charLength);
+	}
+	return maxBytes;
 }
