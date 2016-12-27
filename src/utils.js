@@ -3,7 +3,7 @@
 /**
  * Simply converts string to bytes with String.charCodeAt function
  */
-function UTF8ToBytes(str) {
+function utf8ToBytes(str) {
     let bytes = new Array(str.length);
     for (let i = 0; i < bytes.length; i++) {
         bytes[i] = str.charCodeAt(i);
@@ -31,7 +31,7 @@ function bytesToUTF8(bytes) {
 function stringToBytes(str, encoding="utf8") {
     switch(encoding.toLowerCase()) {
         case "utf8":
-            return UTF8ToBytes(str);
+            return utf8ToBytes(str);
         default:
             throw new Error(`Converting string from ${encoding} to bytes not implemented yet`);
     }
