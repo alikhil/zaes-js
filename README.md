@@ -1,4 +1,7 @@
 # zaes-js
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ede7195711274ea48772aeb198572c44)](https://www.codacy.com/app/alikhil/zaes-js?utm_source=github.com&utm_medium=referral&utm_content=alikhil/zaes-js&utm_campaign=badger)
+
 AES encryption implementation.
 
 ## Attention!
