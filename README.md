@@ -3,6 +3,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ede7195711274ea48772aeb198572c44)](https://www.codacy.com/app/alikhil/zaes-js?utm_source=github.com&utm_medium=referral&utm_content=alikhil/zaes-js&utm_campaign=badger)
 [![Code Climate](https://codeclimate.com/github/alikhil/zaes-js/badges/gpa.svg)](https://codeclimate.com/github/alikhil/zaes-js)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/ede7195711274ea48772aeb198572c44)](https://www.codacy.com/app/alikhil/zaes-js?utm_source=github.com&utm_medium=referral&utm_content=alikhil/zaes-js&utm_campaign=Badge_Coverage)
+[![Build Status](https://travis-ci.org/alikhil/zaes-js.svg?branch=master)](https://travis-ci.org/alikhil/zaes-js)
 
 AES encryption implementation.
 
