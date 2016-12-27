@@ -35,14 +35,16 @@ describe("aes", () => {
         });
 
         it("should encrypt array of bytes of any length with given key that will decryptable by decrypt() function", () => {
-            function test(str, key) {
-                let bytes = utils.bytesToString(str);
+            function test(str) {
+                let key = aes.generateKey(16);
+                let bytes = utils.stringToBytes(str);
                 let encrypted = aes.encrypt(bytes, key);
                 let decrypted = aes.decrypt(encrypted, key);
                 expect(decrypted).to.be.eql(bytes);
             }
             test("1337");
-            test("русские буквы");
+            test("azabasefAWQFQ156");
+            //test("русские буквы");
             //test("•Ý¹mÙO_‼|s¬¹Íе£—I♠f⌂5▓");
             test("aaaaaaaa$aaaaaaaaaaaaa3abbbbbbt59bbbbbbbbbbbbbbb5)bbbbccccccc_ccccccc");
         });
