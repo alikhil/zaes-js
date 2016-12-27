@@ -23,31 +23,33 @@ function bytesToUTF8(bytes) {
 }
 
 /**
- * Converts string with given encoding("utf8" default) to string of bytes
+ * Converts string where each char coded with passed number of bytes, to array of bytes
  * @param str String that need to be converted
- * @param encoding encoding of given string. default is "utf8"
+ * @param bytesPerChar Encoding setting. Number of bytes per character.
+ * For UTF8 - 1, for UTF16 - 2 and so on.
  * @returns Array of bytes
  */
-export function stringToBytes(str, encoding="utf8") {
-	switch(encoding.toLowerCase()) {
-	case "utf8":
+export function stringToBytes(str, bytesPerChar = 1) {
+	switch(bytesPerChar) {
+	case 1:
 		return utf8ToBytes(str);
 	default:
-		throw new Error(`Converting string from ${encoding} to bytes not implemented yet`);
+		throw new Error(`Converting string from ${bytesPerChar} to bytes not implemented yet`);
 	}
 } 
 
 /**
  * Converts bytes to string with given encoding
  * @param bytes Array of bytes
- * @param encoding Encoding of output string. Default is "utf8"
- * @returns string in given encoding
+ * @param bytesPerChar Encoding setting. Number of bytes per character.
+ * For UTF8 - 1, for UTF16 - 2 and so on.
+ * @returns string with passed encoding settings
  */
-export function bytesToString(bytes, encoding="utf8") {
-	switch(encoding.toLowerCase()) {
-	case "utf8":
+export function bytesToString(bytes, bytesPerChar = 1) {
+	switch(bytesPerChar) {
+	case 1:
 		return bytesToUTF8(bytes);
 	default:
-		throw new Error(`Converting from bytes to string with encoding ${encoding} not implemented yet`);
+		throw new Error(`Converting from bytes to string where char is ${bytesPerChar} bytes, not implemented yet`);
 	}
 }
