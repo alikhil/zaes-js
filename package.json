@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "AES encryption/decryption library",
   "main": "index.js",
-  "scripts": {
-    "test": "mocha --compilers js:babel-core/register"
-  },
   "devDependencies": {
     "babel": "^6.5.2",
     "babel-core": "^6.18.2",
@@ -13,7 +10,8 @@
     "babel-register": "^6.18.0",
     "chai": "^3.5.0",
     "codacy-coverage": "^2.0.0",
-    "mocha": "^3.1.2"
+    "mocha": "^3.1.2",
+    "istanbul": "^1.1.0-alpha.1"
   },
   "dependencies": {
     "secure-random": "^1.1.1"
@@ -31,5 +29,13 @@
   "bugs": {
     "url": "https://github.com/alikhil/zaes-js/issues"
   },
-  "homepage": "https://github.com/alikhil/zaes-js#readme"
+  "homepage": "https://github.com/alikhil/zaes-js#readme",
+  "scripts": {
+    "analyze-coverage": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --compilers js:babel-core/register",
+    "send-coverage": "cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage && rm -rf ./coverage",
+    "prepublish": "npm run test",
+    "lint": "eslint .",    
+    "test": "mocha --compilers js:babel-core/register",
+    "compile": "npm run lint && npm run test"    
+  }
 }
