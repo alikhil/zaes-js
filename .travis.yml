@@ -6,5 +6,7 @@ node_js:
 sudo: false
 install:
     - npm install
-after_install:
+script:
+    - npm run analyze-coverage
+    - npm run send-coverage
     - npm run browserify
