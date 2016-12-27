@@ -55,4 +55,16 @@ describe("utils", () => {
 			test([4, 66, 4, 62, 4, 63, 4, 71, 4, 56, 4, 58], 2, "топчик");
 		});
 	});
+
+	describe("detectBytesPerChar(str)", () => {
+		it("should return minimal number of bytes that need to code each character", () => {
+			function test(str, answer) {
+				let bytesPerChar = utils.detectBytesPerChar(str);
+				expect(bytesPerChar).to.be.equal(answer);
+			}
+			test("0123a", 1);
+			test("топчик еее", 2);
+			test("assa 个 domik kek", 2);
+		});
+	});
 });
