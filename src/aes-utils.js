@@ -218,7 +218,7 @@ export function addRoundKey(state, roundKey) {
     return state;
 }
 
-function subBytes(state, box) {
+function subBytesWithBox(state, box) {
     for (let i = 0; i < state.length; i++) {
         for (let j = 0; j < state[i].length; j++) {
             state[i][j] = box[state[i][j]];
@@ -232,16 +232,16 @@ function subBytes(state, box) {
  * replaced with another according to a lookup table.
  */
 export function subBytes(state) {
-    return subBytes(state, S_BOX);
+    return subBytesWithBox(state, S_BOX);
 }
 
 
 export function invSubBytes(state) {
-    return subBytes(state, INV_S_BOX);
+    return subBytesWithBox(state, INV_S_BOX);
 }
 
 
-function shiftRows(state, shifter) {
+function shiftRowsWithShifter(state, shifter) {
     for (let i = 0; i < state.length; i++) {
         for (let j = 0; j < i; j++) {
             state[i] = shifter(state[i]);
@@ -255,12 +255,12 @@ function shiftRows(state, shifter) {
  * are shifted cyclically a certain number of steps.
  */
 export function shiftRows(state) {
-    return shiftRows(state, rotWordLeft); 
+    return shiftRowsWithShifter(state, rotWordLeft); 
 }
 
 
 export function invShiftRows(state) {
-    return shiftRows(state, rotWordRight);
+    return shiftRowsWithShifter(state, rotWordRight);
 }
 
 
