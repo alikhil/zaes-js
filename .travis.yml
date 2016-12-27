@@ -1,0 +1,10 @@
+language: node_js
+
+node_js:
+    - "6"
+    - "node"
+sudo: false
+install:
+    - npm install
+after_install:
+    - npm run browserify
