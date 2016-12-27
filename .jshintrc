@@ -11,5 +11,6 @@
   "eqnull": true,
   "evil": true,
   "node": true,
-  "mocha": true
+  "mocha": true,
+  "moz": true
 }
