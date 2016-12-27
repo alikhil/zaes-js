@@ -13,7 +13,7 @@
 
 const SPACE_SYMBOL = 0;
 export const BLOCK_LENGTH = 16;
-/* jshint ignore:start */
+
 const INV_S_BOX = [
     0x52, 0x09, 0x6A, 0xD5, 0x30, 0x36, 0xA5, 0x38, 0xBF, 0x40, 0xA3, 0x9E, 0x81, 0xF3, 0xD7, 0xFB,
     0x7C, 0xE3, 0x39, 0x82, 0x9B, 0x2F, 0xFF, 0x87, 0x34, 0x8E, 0x43, 0x44, 0xC4, 0xDE, 0xE9, 0xCB,
@@ -141,7 +141,7 @@ export const R_CON =  [
     [0x1b, 0x00, 0x00, 0x00],
     [0x36, 0x00, 0x00, 0x00]
 ];
-/* jshint ignore:end */
+
 export function subWord(word) {
     return [
         S_BOX[word[0]],
@@ -276,12 +276,10 @@ export function mixColumns(state) {
             a[i] = state[i][c];
             b[i] = state[i][c] & 0x80 ? state[i][c] << 1 ^ 0x011b : state[i][c] << 1;
         }
-        /* jshint ignore:start */
         state[0][c] = b[0] ^ a[1] ^ b[1] ^ a[2] ^ a[3];
         state[1][c] = a[0] ^ b[1] ^ a[2] ^ b[2] ^ a[3];
         state[2][c] = a[0] ^ a[1] ^ b[2] ^ a[3] ^ b[3];
         state[3][c] = a[0] ^ b[0] ^ a[1] ^ a[2] ^ b[3];
-        /* jshint ignore:end */
 
     }
     return state;
@@ -296,14 +294,12 @@ export function invMixColumns(state) {
             temp[i][j] = state[i][j];
         }
     }
-    /* jshint ignore:start */
     for (let c = 0; c < 4; c++) {
         temp[0][c] = GF_MULT_BY_14[state[0][c]] ^ GF_MULT_BY_11[state[1][c]] ^ GF_MULT_BY_13[state[2][c]] ^ GF_MULT_BY_9[state[3][c]];
         temp[1][c] = GF_MULT_BY_9[state[0][c]] ^ GF_MULT_BY_14[state[1][c]] ^ GF_MULT_BY_11[state[2][c]] ^ GF_MULT_BY_13[state[3][c]];
         temp[2][c] = GF_MULT_BY_13[state[0][c]] ^ GF_MULT_BY_9[state[1][c]] ^ GF_MULT_BY_14[state[2][c]] ^ GF_MULT_BY_11[state[3][c]];
         temp[3][c] = GF_MULT_BY_11[state[0][c]] ^ GF_MULT_BY_13[state[1][c]] ^ GF_MULT_BY_9[state[2][c]] ^ GF_MULT_BY_14[state[3][c]];
     }
-    /* jshint ignore:end */
     return temp;
 }
 
