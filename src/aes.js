@@ -20,73 +20,73 @@ import * as a_u from "./aes-utils";
 const secureRandom = require("secure-random");
 
 function isKeyLengthValid(length) {
-    return length === 16 ||
-        length === 24 ||
-        length === 32; 
+	return length === 16 ||
+		length === 24 ||
+		length === 32; 
 }
 
 function splitToMatrix(block)
 {
-    let state = new Array(4);
-    for (let i = 0; i < 4; i++) {
-        state[i] = block.slice(i * COLUMNS, (i + 1) * COLUMNS);
-    }
-    return state;
+	let state = new Array(4);
+	for (let i = 0; i < 4; i++) {
+		state[i] = block.slice(i * COLUMNS, (i + 1) * COLUMNS);
+	}
+	return state;
 }
 
 function getRoundsCount(key) {
-    switch(key.length) {
-        case 16:
-            return 10;
-        case 24:
-            return 12;
-        case 32:
-            return 14;
-        default:
-            throw new Error("invalid key length");
-    }
+	switch(key.length) {
+	case 16:
+		return 10;
+	case 24:
+		return 12;
+	case 32:
+		return 14;
+	default:
+		throw new Error("invalid key length");
+	}
 }
 
 function getBlockFromState(state) {
-    let block = new Array(a_u.BLOCK_LENGTH);
-    for (let i = 0; i < state.length; i++) {
-        for (let j = 0; j < state[i].length; j++) {
-            block[4 * i + j] = state[i][j];
-        }
-    } 
-    return block;
+	let block = new Array(a_u.BLOCK_LENGTH);
+	for (let i = 0; i < state.length; i++) {
+		for (let j = 0; j < state[i].length; j++) {
+			block[4 * i + j] = state[i][j];
+		}
+	} 
+	return block;
 }
 
 function applyActionToBlocks(action, blocks, keySchedule) {
-    let newBlocks = new Array(blocks.length);
-    for (let i = 0; i < blocks.length; i++) {
-        newBlocks[i] = action(blocks[i], keySchedule);
-    }
-    return newBlocks;
+	let newBlocks = new Array(blocks.length);
+	for (let i = 0; i < blocks.length; i++) {
+		newBlocks[i] = action(blocks[i], keySchedule);
+	}
+	return newBlocks;
 } 
 
 /**
  * Generates keys for each round
  */
 function expandKey(key) {
-    let tempWord = new Array(WORD_LENGTH);
-    let rounds = getRoundsCount(key);
-    let wordsCount = key.length / WORD_LENGTH;
-    let keySchedule = new Array(COLUMNS * (rounds + 1));
-    
-    for (let i = 0; i < wordsCount; i++) {
-        keySchedule[i] = key.slice(WORD_LENGTH * i, WORD_LENGTH * i + WORD_LENGTH);
-    }
-    for (let i = wordsCount; i < keySchedule.length; i++) {
-        tempWord = keySchedule[i - 1];
-        if (i % wordsCount === 0) {
-            tempWord = xorWords(subWord(rotWordLeft(tempWord)), a_u.R_CON[i / wordsCount]);
-        } else if (wordsCount > 6 && i % wordsCount === 4) {
-            tempWord = subWord(tempWord);
-        }
-        keySchedule[i] = xorWords(keySchedule[i - wordsCount], tempWord);
-    }
-    return keySchedule;
+	let tempWord = new Array(WORD_LENGTH);
+	let rounds = getRoundsCount(key);
+	let wordsCount = key.length / WORD_LENGTH;
+	let keySchedule = new Array(COLUMNS * (rounds + 1));
+	
+	for (let i = 0; i < wordsCount; i++) {
+		keySchedule[i] = key.slice(WORD_LENGTH * i, WORD_LENGTH * i + WORD_LENGTH);
+	}
+	for (let i = wordsCount; i < keySchedule.length; i++) {
+		tempWord = keySchedule[i - 1];
+		if (i % wordsCount === 0) {
+			tempWord = xorWords(subWord(rotWordLeft(tempWord)), a_u.R_CON[i / wordsCount]);
+		} else if (wordsCount > 6 && i % wordsCount === 4) {
+			tempWord = subWord(tempWord);
+		}
+		keySchedule[i] = xorWords(keySchedule[i - wordsCount], tempWord);
+	}
+	return keySchedule;
 }
 
 /**
@@ -96,32 +96,32 @@ function expandKey(key) {
  * @throws Error if given invalid key length
  */
 export function generateKey(length) {
-    if (!isKeyLengthValid(length)) {
-        throw new Error("invalid key length");
-    }
-    let array = secureRandom(length);
-    return array;
+	if (!isKeyLengthValid(length)) {
+		throw new Error("invalid key length");
+	}
+	let array = secureRandom(length);
+	return array;
 }
 
 /**
  * Encrypts given block
  */
 function encryptBlock(block, keySchedule) {
-    let state = splitToMatrix(block);
+	let state = splitToMatrix(block);
 
-    state = a_u.addRoundKey(state, keySchedule.slice(0, 4));
-    let rounds = keySchedule.length / COLUMNS;
-    for (let round = 1; round < rounds; round++){
-        state = a_u.subBytes(state);
-        state = a_u.shiftRows(state);
-        state = a_u.mixColumns(state);
-        state = a_u.addRoundKey(state, keySchedule.slice(round * COLUMNS, (round + 1) * COLUMNS));
-    }
-    state = a_u.subBytes(state);
-    state = a_u.shiftRows(state);
-    state = a_u.addRoundKey(state, keySchedule.slice(COLUMNS * (rounds-1), COLUMNS * rounds));    
-    
-   return getBlockFromState(state);
+	state = a_u.addRoundKey(state, keySchedule.slice(0, 4));
+	let rounds = keySchedule.length / COLUMNS;
+	for (let round = 1; round < rounds; round++){
+		state = a_u.subBytes(state);
+		state = a_u.shiftRows(state);
+		state = a_u.mixColumns(state);
+		state = a_u.addRoundKey(state, keySchedule.slice(round * COLUMNS, (round + 1) * COLUMNS));
+	}
+	state = a_u.subBytes(state);
+	state = a_u.shiftRows(state);
+	state = a_u.addRoundKey(state, keySchedule.slice(COLUMNS * (rounds-1), COLUMNS * rounds));    
+	
+	return getBlockFromState(state);
 }
 
 /**
@@ -131,34 +131,34 @@ function encryptBlock(block, keySchedule) {
  * @throws Error if given invalid key
  */
 export function encrypt(bytes, key) {
-    if (!isKeyLengthValid(key.length)) {
-        throw new Error("invalid key length");
-    }
-    let keySchedule = expandKey(key);
-    let normalizedArray = a_u.normalize(bytes);
-    let blocks = a_u.splitArray(normalizedArray);
-    let encryptedBlocks = applyActionToBlocks(encryptBlock, blocks, keySchedule);
-    return a_u.joinArray(encryptedBlocks);
+	if (!isKeyLengthValid(key.length)) {
+		throw new Error("invalid key length");
+	}
+	let keySchedule = expandKey(key);
+	let normalizedArray = a_u.normalize(bytes);
+	let blocks = a_u.splitArray(normalizedArray);
+	let encryptedBlocks = applyActionToBlocks(encryptBlock, blocks, keySchedule);
+	return a_u.joinArray(encryptedBlocks);
 }
 
 
 
 function decryptBlock(block, keySchedule) {
-    let state = splitToMatrix(block);
-    state = a_u.addRoundKey(state, keySchedule.slice(40, 44));
-    let rounds = keySchedule.length / COLUMNS;
-    for (let round = rounds - 1; round > 0; round--) {
-        state = a_u.invShiftRows(state);
-        state = a_u.invSubBytes(state);
-        state = a_u.addRoundKey(state, keySchedule.slice(round * COLUMNS, (round + 1) * COLUMNS));
-        state = a_u.invMixColumns(state);
-    }
+	let state = splitToMatrix(block);
+	state = a_u.addRoundKey(state, keySchedule.slice(40, 44));
+	let rounds = keySchedule.length / COLUMNS;
+	for (let round = rounds - 1; round > 0; round--) {
+		state = a_u.invShiftRows(state);
+		state = a_u.invSubBytes(state);
+		state = a_u.addRoundKey(state, keySchedule.slice(round * COLUMNS, (round + 1) * COLUMNS));
+		state = a_u.invMixColumns(state);
+	}
 
-    state = a_u.invShiftRows(state);
-    state = a_u.invSubBytes(state);
-    state = a_u.addRoundKey(state, keySchedule.slice(0, COLUMNS));
+	state = a_u.invShiftRows(state);
+	state = a_u.invSubBytes(state);
+	state = a_u.addRoundKey(state, keySchedule.slice(0, COLUMNS));
 
-    return getBlockFromState(state);
+	return getBlockFromState(state);
 
 }
 
@@ -170,10 +170,10 @@ function decryptBlock(block, keySchedule) {
  * @returns array of bytes. 
  */
 export function decrypt(bytes, key) {
-    let blocks = a_u.splitArray(bytes);
-    let keySchedule = expandKey(key);
-    let decryptedBlocks = applyActionToBlocks(decryptBlock, blocks, keySchedule);
-    let decryptedArray = a_u.joinArray(decryptedBlocks);
-    
-    return a_u.deleteSpaces(decryptedArray);
+	let blocks = a_u.splitArray(bytes);
+	let keySchedule = expandKey(key);
+	let decryptedBlocks = applyActionToBlocks(decryptBlock, blocks, keySchedule);
+	let decryptedArray = a_u.joinArray(decryptedBlocks);
+	
+	return a_u.deleteSpaces(decryptedArray);
 }

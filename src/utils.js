@@ -4,22 +4,22 @@
  * Simply converts string to bytes with String.charCodeAt function
  */
 function utf8ToBytes(str) {
-    let bytes = new Array(str.length);
-    for (let i = 0; i < bytes.length; i++) {
-        bytes[i] = str.charCodeAt(i);
-    }
-    return bytes;
+	let bytes = new Array(str.length);
+	for (let i = 0; i < bytes.length; i++) {
+		bytes[i] = str.charCodeAt(i);
+	}
+	return bytes;
 }
 
 /**
  * Simply converts bytes to utf8 string using String.fromCharCode function
  */
 function bytesToUTF8(bytes) {
-    let str = "";
-    for (let i = 0; i < bytes.length; i++) {
-        str += String.fromCharCode(bytes[i]);
-    }
-    return str;
+	let str = "";
+	for (let i = 0; i < bytes.length; i++) {
+		str += String.fromCharCode(bytes[i]);
+	}
+	return str;
 }
 
 /**
@@ -29,12 +29,12 @@ function bytesToUTF8(bytes) {
  * @returns Array of bytes
  */
 export function stringToBytes(str, encoding="utf8") {
-    switch(encoding.toLowerCase()) {
-        case "utf8":
-            return utf8ToBytes(str);
-        default:
-            throw new Error(`Converting string from ${encoding} to bytes not implemented yet`);
-    }
+	switch(encoding.toLowerCase()) {
+	case "utf8":
+		return utf8ToBytes(str);
+	default:
+		throw new Error(`Converting string from ${encoding} to bytes not implemented yet`);
+	}
 } 
 
 /**
@@ -44,10 +44,10 @@ export function stringToBytes(str, encoding="utf8") {
  * @returns string in given encoding
  */
 export function bytesToString(bytes, encoding="utf8") {
-    switch(encoding.toLowerCase()) {
-        case "utf8":
-            return bytesToUTF8(bytes);
-        default:
-            throw new Error(`Converting from bytes to string with encoding ${encoding} not implemented yet`);
-    }
+	switch(encoding.toLowerCase()) {
+	case "utf8":
+		return bytesToUTF8(bytes);
+	default:
+		throw new Error(`Converting from bytes to string with encoding ${encoding} not implemented yet`);
+	}
 }
