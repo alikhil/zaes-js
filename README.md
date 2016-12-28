@@ -1,5 +1,5 @@
 # zaes-js
-
+[![ES 6](https://camo.githubusercontent.com/567e52200713e0f0c05a5238d91e1d096292b338/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f65732d362b2d627269676874677265656e2e737667)](https://camo.githubusercontent.com/567e52200713e0f0c05a5238d91e1d096292b338/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f65732d362b2d627269676874677265656e2e737667)
 [![npm version](https://badge.fury.io/js/zaes-js.svg)](https://badge.fury.io/js/zaes-js)
 [![Build Status](https://travis-ci.org/alikhil/zaes-js.svg?branch=master)](https://travis-ci.org/alikhil/zaes-js)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ede7195711274ea48772aeb198572c44)](https://www.codacy.com/app/alikhil/zaes-js?utm_source=github.com&utm_medium=referral&utm_content=alikhil/zaes-js&utm_campaign=badger)
