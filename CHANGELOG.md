@@ -2,7 +2,10 @@
 ## [Unreleased]
 ### Changed
     - Throws error if invalid data passed to decrypt
+    - The structure of encrypted data is changed. First 4 bytes contains information about initial data length.
+### Fixed
     - Fixes bug on decrypting with 196 and 256 bit keys
+    - Fixed rare bug on encrypting 2 byte symbols
 
 ## [1.1.1] - 2016-12-28
 ### Changed

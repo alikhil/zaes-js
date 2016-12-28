@@ -137,7 +137,9 @@ module.exports.encrypt = function(bytes, key) {
 	let normalizedArray = a_u.normalize(bytes);
 	let blocks = a_u.splitArray(normalizedArray);
 	let encryptedBlocks = applyActionToBlocks(encryptBlock, blocks, keySchedule);
-	return a_u.joinArray(encryptedBlocks);
+	let b = bytes.length;
+	let bytesLengthArray = [(b >> 24) & 255, (b >> 16) & 255, (b >> 8) & 255, b & 255]; 
+	return bytesLengthArray.concat(a_u.joinArray(encryptedBlocks));
 };
 
 
@@ -170,10 +172,11 @@ function decryptBlock(block, keySchedule) {
  * @returns array of bytes. 
  */
 module.exports.decrypt = function(bytes, key) {
-	let blocks = a_u.splitArray(bytes);
+	let bytesLength = (bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3];
+	let blocks = a_u.splitArray(bytes.slice(4));
 	let keySchedule = expandKey(key);
 	let decryptedBlocks = applyActionToBlocks(decryptBlock, blocks, keySchedule);
 	let decryptedArray = a_u.joinArray(decryptedBlocks);
 	
-	return a_u.deleteSpaces(decryptedArray);
+	return decryptedArray.slice(0, bytesLength);
 };
