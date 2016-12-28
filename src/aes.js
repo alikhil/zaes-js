@@ -144,7 +144,8 @@ module.exports.encrypt = function(bytes, key) {
 
 function decryptBlock(block, keySchedule) {
 	let state = splitToMatrix(block);
-	state = a_u.addRoundKey(state, keySchedule.slice(40, 44));
+	let kl = keySchedule.length;
+	state = a_u.addRoundKey(state, keySchedule.slice(kl - 4, kl));
 	let rounds = keySchedule.length / COLUMNS;
 	for (let round = rounds - 1; round > 0; round--) {
 		state = a_u.invShiftRows(state);

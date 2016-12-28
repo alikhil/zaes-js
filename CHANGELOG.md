@@ -2,6 +2,7 @@
 ## [Unreleased]
 ### Changed
     - Throws error if invalid data passed to decrypt
+    - Fixes bug on decrypting with 196 and 256 bit keys
 
 ## [1.1.1] - 2016-12-28
 ### Changed
