@@ -2359,6 +2359,9 @@ module.exports.deleteSpaces = function (arr) {
  * Splits array to array of blocks
  */
 module.exports.splitArray = function (array) {
+	if (array.length % BLOCK_LENGTH !== 0) {
+		throw new Error("Corrupted input. Array length should be multiple of " + BLOCK_LENGTH + ".");
+	}
 	var blocks = new Array(array.length / BLOCK_LENGTH);
 	for (var i = 0; i < blocks.length; i++) {
 		blocks[i] = array.slice(i * BLOCK_LENGTH, (i + 1) * BLOCK_LENGTH);
@@ -2600,12 +2603,15 @@ module.exports.encrypt = function (bytes, key) {
 	var normalizedArray = a_u.normalize(bytes);
 	var blocks = a_u.splitArray(normalizedArray);
 	var encryptedBlocks = applyActionToBlocks(encryptBlock, blocks, keySchedule);
-	return a_u.joinArray(encryptedBlocks);
+	var b = bytes.length;
+	var bytesLengthArray = [b >> 24 & 255, b >> 16 & 255, b >> 8 & 255, b & 255];
+	return bytesLengthArray.concat(a_u.joinArray(encryptedBlocks));
 };
 
 function decryptBlock(block, keySchedule) {
 	var state = splitToMatrix(block);
-	state = a_u.addRoundKey(state, keySchedule.slice(40, 44));
+	var kl = keySchedule.length;
+	state = a_u.addRoundKey(state, keySchedule.slice(kl - 4, kl));
 	var rounds = keySchedule.length / COLUMNS;
 	for (var round = rounds - 1; round > 0; round--) {
 		state = a_u.invShiftRows(state);
@@ -2629,12 +2635,13 @@ function decryptBlock(block, keySchedule) {
  * @returns array of bytes. 
  */
 module.exports.decrypt = function (bytes, key) {
-	var blocks = a_u.splitArray(bytes);
+	var bytesLength = (bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3];
+	var blocks = a_u.splitArray(bytes.slice(4));
 	var keySchedule = expandKey(key);
 	var decryptedBlocks = applyActionToBlocks(decryptBlock, blocks, keySchedule);
 	var decryptedArray = a_u.joinArray(decryptedBlocks);
 
-	return a_u.deleteSpaces(decryptedArray);
+	return decryptedArray.slice(0, bytesLength);
 };
 
 },{"./aes-utils":9,"secure-random":8}],11:[function(require,module,exports){

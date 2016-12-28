@@ -1,5 +1,6 @@
 
-## [Unreleased]
+## [2.0.0] - 2016-12-29 [Yanked]
+** This version uncompatible with previous ones! **
 ### Changed
     - Throws error if invalid data passed to decrypt
     - The structure of encrypted data is changed. First 4 bytes contains information about initial data length.
