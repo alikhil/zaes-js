@@ -9,6 +9,7 @@ before_install:
 install:
     - npm install
 script:
+    - npm run compile
     - npm run analyze-coverage
     - npm run send-coverage
     - npm run browserify
