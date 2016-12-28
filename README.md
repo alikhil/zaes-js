@@ -30,15 +30,9 @@ var aes = require("zaes-js");
 
 #### Browser
 
-For use in browser run command above.
+There is `bundle.zaes.js` in `./node_modules/zaes-js/` directory.
 
-```sh
-npm run browserify
-```
-
-It will generate `bundle.zaes.js` in `./node_modules/zaes-js/` directory.
-
-Then on your html:
+Include it on your html:
 ```html
 <script src="/path/to/bundle.zaes.js"></script>
 ```
