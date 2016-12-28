@@ -1,3 +1,6 @@
 .travis.yml
 .jshintrc
 .codeclimate.yml
+coverage
+.vscode
+npm-debug.log*
