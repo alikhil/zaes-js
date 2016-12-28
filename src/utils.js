@@ -7,7 +7,7 @@
  * For UTF8 - 1, for UTF16 - 2 and so on.
  * @returns Array of bytes
  */
-export function stringToBytes(str, bytesPerChar = 1) {
+module.exports.stringToBytes = function(str, bytesPerChar = 1) {
 	let bytes = [];
 	for (let i = 0; i < str.length; i++) {
 		let char = str.charCodeAt(i);
@@ -22,7 +22,7 @@ export function stringToBytes(str, bytesPerChar = 1) {
 		}
 	}
 	return bytes;
-} 
+};
 
 /**
  * Converts bytes to string with given encoding
@@ -31,7 +31,7 @@ export function stringToBytes(str, bytesPerChar = 1) {
  * For UTF8 - 1, for UTF16 - 2 and so on.
  * @returns string with passed encoding settings
  */
-export function bytesToString(bytes, bytesPerChar = 1) {
+module.exports.bytesToString = function(bytes, bytesPerChar = 1) {
 	let str = "";
 	let iter = 0;
 	let strLength = bytes.length / bytesPerChar;
@@ -44,7 +44,7 @@ export function bytesToString(bytes, bytesPerChar = 1) {
 		str = str + String.fromCharCode(charCode);
 	}
 	return str;
-}
+};
 
 
 /**
@@ -53,7 +53,7 @@ export function bytesToString(bytes, bytesPerChar = 1) {
  * @param str String that need to scan
  * @returns int number of bytes that needs to code each character
  */
-export function detectBytesPerChar(str) {
+module.exports.detectBytesPerChar = function(str) {
 	let maxBytes = 0;
 	for (let i = 0; i < str.length; i++) {
 		let code = str.charCodeAt(i);
@@ -65,4 +65,4 @@ export function detectBytesPerChar(str) {
 		maxBytes = Math.max(maxBytes, charLength);
 	}
 	return maxBytes;
-}
+};

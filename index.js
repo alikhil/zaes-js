@@ -1,7 +1,7 @@
 "use strict";
 
-import * as utils from "./src/utils";
-import * as aes from "./src/aes";
+const utils = require("./src/utils");
+const aes = require("./src/aes");
 
 module.exports = {
 	generateKey: aes.generateKey,

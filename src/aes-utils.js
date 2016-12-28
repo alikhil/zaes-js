@@ -12,7 +12,8 @@
 
 
 const SPACE_SYMBOL = 0;
-export const BLOCK_LENGTH = 16;
+const BLOCK_LENGTH = 16;
+module.exports.BLOCK_LENGTH = BLOCK_LENGTH; 
 
 const INV_S_BOX = [
 	0x52, 0x09, 0x6A, 0xD5, 0x30, 0x36, 0xA5, 0x38, 0xBF, 0x40, 0xA3, 0x9E, 0x81, 0xF3, 0xD7, 0xFB,
@@ -128,7 +129,7 @@ const S_BOX = [
 	0x8C, 0xA1, 0x89, 0x0D, 0xBF, 0xE6, 0x42, 0x68, 0x41, 0x99, 0x2D, 0x0F, 0xB0, 0x54, 0xBB, 0x16
 ];
 
-export const R_CON =  [
+module.exports.R_CON =  [
 	[0x00, 0x00, 0x00, 0x00],
 	[0x01, 0x00, 0x00, 0x00],
 	[0x02, 0x00, 0x00, 0x00],
@@ -142,15 +143,16 @@ export const R_CON =  [
 	[0x36, 0x00, 0x00, 0x00]
 ];
 
-export function subWord(word) {
+
+module.exports.subWord = function(word) {
 	return [
 		S_BOX[word[0]],
 		S_BOX[word[1]],
 		S_BOX[word[2]],
 		S_BOX[word[3]]];
-}
+};
 
-export function xorWords(wordA, wordB) {
+function xorWords(wordA, wordB) {
 	let xored = new Array(4);
 	for (let i = 0; i < xored.length; i++) {
 		xored[i] = wordA[i] ^ wordB[i];
@@ -158,50 +160,56 @@ export function xorWords(wordA, wordB) {
 	return xored;
 }
 
-export function rotWordLeft(word) {
+module.exports.xorWords = xorWords;
+
+function rotWordLeft(word) {
 	return [word[1], word[2], word[3], word[0]];
 }
 
-export function rotWordRight(word) {
+module.exports.rotWordLeft = rotWordLeft;
+
+function rotWordRight(word) {
 	return [word[3], word[0], word[1], word[2]];
 }
+
+module.exports.rotWordRight = rotWordRight;
 
 /**
  * Fills array with ending spaces if it's length != N * 16
  */
-export function normalize(ar) {
+module.exports.normalize = function(ar) {
 	let array = ar.slice();
 	while(array.length % BLOCK_LENGTH !== 0) {
 		array.push(SPACE_SYMBOL);
 	}
 	return array;
-}
+};
 /**
  * Removes ending spaces
  */
-export function deleteSpaces(arr) {
+module.exports.deleteSpaces = function(arr) {
 	let i = arr.length - 1;
 	while(arr[i] === SPACE_SYMBOL && i > 0) {
 		i--;
 	}
 	return arr.slice(0, i + 1);
-}
+};
 
 /**
  * Splits array to array of blocks
  */
-export function splitArray(array) {
+module.exports.splitArray = function(array) {
 	let blocks = new Array(array.length / BLOCK_LENGTH);
 	for (let i = 0; i < blocks.length; i++) {
 		blocks[i] = array.slice(i * BLOCK_LENGTH, (i + 1) * BLOCK_LENGTH);
 	}
 	return blocks;
-}
+};
 
 /**
  * Joins blocks to single array
  */
-export function joinArray(blocks) {
+module.exports.joinArray = function(blocks) {
 	let array = [];
 	for (let i = 0; i < blocks.length; i++) {
 		for (let j = 0; j < BLOCK_LENGTH; j++) {
@@ -209,14 +217,14 @@ export function joinArray(blocks) {
 		}
 	}
 	return array;
-}
+};
 
-export function addRoundKey(state, roundKey) {
+module.exports.addRoundKey = function(state, roundKey) {
 	for (let i = 0; i < state.length; i++) {
 		state[i] = xorWords(state[i], roundKey[i]);
 	}
 	return state;
-}
+};
 
 function subBytesWithBox(state, box) {
 	for (let i = 0; i < state.length; i++) {
@@ -231,14 +239,14 @@ function subBytesWithBox(state, box) {
  * A non-linear substitution step where each byte is
  * replaced with another according to a lookup table.
  */
-export function subBytes(state) {
+module.exports.subBytes = function(state) {
 	return subBytesWithBox(state, S_BOX);
-}
+};
 
 
-export function invSubBytes(state) {
+module.exports.invSubBytes = function(state) {
 	return subBytesWithBox(state, INV_S_BOX);
-}
+};
 
 
 function shiftRowsWithShifter(state, shifter) {
@@ -254,21 +262,21 @@ function shiftRowsWithShifter(state, shifter) {
  * A transposition step where the last three rows of the state
  * are shifted cyclically a certain number of steps.
  */
-export function shiftRows(state) {
+module.exports.shiftRows = function(state) {
 	return shiftRowsWithShifter(state, rotWordLeft); 
-}
+};
 
 
-export function invShiftRows(state) {
+module.exports.invShiftRows = function(state) {
 	return shiftRowsWithShifter(state, rotWordRight);
-}
+};
 
 
 /**
  * A mixing operation which operates on the columns 
  * of the state, combining the four bytes in each column
  */
-export function mixColumns(state) {
+module.exports.mixColumns = function(state) {
 	for (let c = 0; c < 4; c++) {
 		let a = new Array(4);
 		let b = new Array(4);
@@ -283,10 +291,10 @@ export function mixColumns(state) {
 
 	}
 	return state;
-}
+};
 
 
-export function invMixColumns(state) {
+module.exports.invMixColumns = function(state) {
 	let temp = new Array(4);
 	for (let i = 0; i < 4; i++) {
 		temp[i] = new Array(4);
@@ -301,5 +309,5 @@ export function invMixColumns(state) {
 		temp[3][c] = GF_MULT_BY_11[state[0][c]] ^ GF_MULT_BY_13[state[1][c]] ^ GF_MULT_BY_9[state[2][c]] ^ GF_MULT_BY_14[state[3][c]];
 	}
 	return temp;
-}
+};
 
