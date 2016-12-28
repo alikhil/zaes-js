@@ -34,19 +34,60 @@ describe("aes", () => {
 			assert.throws(() => aes.encrypt("data", "1515"), Error, "invalid key length");
 		});
 
-		it("should encrypt array of bytes of any length with given key that will decryptable by decrypt() function", () => {
-			function test(str) {
-				let key = aes.generateKey(16);
-				let bytes = utils.stringToBytes(str);
-				let encrypted = aes.encrypt(bytes, key);
-				let decrypted = aes.decrypt(encrypted, key);
-				expect(decrypted).to.be.eql(bytes);
-			}
-			test("1337");
-			test("azabasefAWQFQ156");
+		function simpleCase(str, keyLength) {
+			let key = aes.generateKey(keyLength);
+			let bytes = utils.stringToBytes(str);
+			let encrypted = aes.encrypt(bytes, key);
+			let decrypted = aes.decrypt(encrypted, key);
+			expect(decrypted).to.be.eql(bytes);
+		}
+
+		function testAllSimpleCases(keyLength) {
+			simpleCase("1337", keyLength);
+			simpleCase("azabasefAWQFQ156", keyLength);
+			simpleCase("aaaaaaaa$aaaaaaaaaaaaa3abbbbbbt59bbbbbbbbbbbbbbb5)bbbbccccccc_ccccccc", keyLength);
+		}
+
+		it("should encrypt any length array with 128 bit key", () => {
+			testAllSimpleCases(16);
 			//test("русские буквы");
 			//test("•Ý¹mÙO_‼|s¬¹Íе£—I♠f⌂5▓");
-			test("aaaaaaaa$aaaaaaaaaaaaa3abbbbbbt59bbbbbbbbbbbbbbb5)bbbbccccccc_ccccccc");
+		});
+
+		it("should encrypt any length array with 192 bit key", () => {
+			testAllSimpleCases(24);
+		});
+
+		it("should encrypt any length array with 256 bit key", () => {
+			testAllSimpleCases(32);
+		});
+
+		function testUglyStr(str, keyLength) {
+			let key = aes.generateKey(keyLength);
+			let bytesPerChar = utils.detectBytesPerChar(str);
+			let bytes = utils.stringToBytes(str, bytesPerChar);
+			let encrypted = aes.encrypt(bytes, key);
+			let decrypted = aes.decrypt(encrypted, key);
+			expect(decrypted).to.be.eql(bytes);
+			let init = utils.bytesToString(bytes, bytesPerChar);
+			expect(init).to.be.equal(str);				
+		}
+
+		function testAllUgly(keyLength) {
+			testUglyStr(String.fromCharCode(61952), keyLength);
+			testUglyStr("㞂⁶ࡠ똊戅숂ࠆ삖ڱh䁥Ŝɴ阄䀚䀋㑐耯⩠෇ဆ〞�鱡洐Ĥ©댐ᡏᬀ瀅退ꊭ钤 ", keyLength);
+		}
+
+		it("should encrypt array of bytes of ugly characters with 128 bit key", () => {
+			testAllUgly(16);
+		});
+
+		it("should encrypt array of bytes of ugly characters with 192 bit key", () => {
+			testAllUgly(24);
+		});
+
+		it("should encrypt array of bytes of ugly characters with 256 bit key", () => {
+			testAllUgly(32);
 		});
 	});
 	
