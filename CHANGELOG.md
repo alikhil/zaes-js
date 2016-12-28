@@ -1,4 +1,8 @@
 
+## [Unreleased]
+### Changed
+    - Throws error if invalid data passed to decrypt
+
 ## [1.1.1] - 2016-12-28
 ### Changed
     - ES6 feature import/export replaced with require/module.exports

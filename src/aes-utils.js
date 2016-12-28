@@ -199,6 +199,9 @@ module.exports.deleteSpaces = function(arr) {
  * Splits array to array of blocks
  */
 module.exports.splitArray = function(array) {
+	if (array.length % BLOCK_LENGTH !== 0) {
+		throw new Error(`Corrupted input. Array length should be multiple of ${BLOCK_LENGTH}.`);
+	}
 	let blocks = new Array(array.length / BLOCK_LENGTH);
 	for (let i = 0; i < blocks.length; i++) {
 		blocks[i] = array.slice(i * BLOCK_LENGTH, (i + 1) * BLOCK_LENGTH);
