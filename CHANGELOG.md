@@ -1,3 +1,6 @@
+### [Unreleased]
+### Changed 
+    - Updated jsdoc. Now types of argument and results are specified
 
 ## [2.0.0] - 2016-12-29 [Yanked]
 ** This version uncompatible with previous ones! **

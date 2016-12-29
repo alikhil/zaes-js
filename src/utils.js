@@ -2,10 +2,10 @@
 
 /**
  * Converts string where each char coded with passed number of bytes, to array of bytes
- * @param str String that need to be converted
- * @param bytesPerChar Encoding setting. Number of bytes per character.
+ * @param {string} str String that need to be converted
+ * @param {number} [bytesPerChar=1] Encoding setting. Number of bytes per character.
  * For UTF8 - 1, for UTF16 - 2 and so on.
- * @returns Array of bytes
+ * @returns {number[]} Array of bytes
  */
 module.exports.stringToBytes = function(str, bytesPerChar = 1) {
 	let bytes = [];
@@ -26,10 +26,10 @@ module.exports.stringToBytes = function(str, bytesPerChar = 1) {
 
 /**
  * Converts bytes to string with given encoding
- * @param bytes Array of bytes
- * @param bytesPerChar Encoding setting. Number of bytes per character.
+ * @param {number[]} bytes Array of bytes
+ * @param {number} [bytesPerChar=1] Encoding setting. Number of bytes per character.
  * For UTF8 - 1, for UTF16 - 2 and so on.
- * @returns string with passed encoding settings
+ * @returns {string} string that was converted from bytes
  */
 module.exports.bytesToString = function(bytes, bytesPerChar = 1) {
 	let str = "";
@@ -50,8 +50,8 @@ module.exports.bytesToString = function(bytes, bytesPerChar = 1) {
 /**
  * Detects number of bytes per char needed to code passed string.
  * Result can be used as param for bytesToString or stringToBytes
- * @param str String that need to scan
- * @returns int number of bytes that needs to code each character
+ * @param {string} str String that need to scan
+ * @returns {number} number of bytes that needs to code each character
  */
 module.exports.detectBytesPerChar = function(str) {
 	let maxBytes = 0;
