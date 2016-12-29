@@ -135,12 +135,11 @@ module.exports.encrypt = function(bytes, key) {
 		throw new Error("invalid key length");
 	}
 	let keySchedule = expandKey(key);
+	let lastBlockLength = bytes.length % a_u.BLOCK_LENGTH;
 	let normalizedArray = a_u.normalize(bytes);
 	let blocks = a_u.splitArray(normalizedArray);
 	let encryptedBlocks = applyActionToBlocks(encryptBlock, blocks, keySchedule);
-	let b = bytes.length;
-	let bytesLengthArray = [(b >> 24) & 255, (b >> 16) & 255, (b >> 8) & 255, b & 255]; 
-	return bytesLengthArray.concat(a_u.joinArray(encryptedBlocks));
+	return [lastBlockLength].concat(a_u.joinArray(encryptedBlocks));
 };
 
 
@@ -173,11 +172,14 @@ function decryptBlock(block, keySchedule) {
  * @returns {number[]} Decrypted array of bytes. 
  */
 module.exports.decrypt = function(bytes, key) {
-	let bytesLength = (bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3];
-	let blocks = a_u.splitArray(bytes.slice(4));
+	let lastBlockLength = bytes[0];
+	let blocks = a_u.splitArray(bytes.slice(1));
 	let keySchedule = expandKey(key);
 	let decryptedBlocks = applyActionToBlocks(decryptBlock, blocks, keySchedule);
 	let decryptedArray = a_u.joinArray(decryptedBlocks);
-	
-	return decryptedArray.slice(0, bytesLength);
+	let trueLength = decryptedArray.length;
+	if (lastBlockLength > 0) {
+		trueLength = trueLength - a_u.BLOCK_LENGTH + lastBlockLength;
+	}
+	return decryptedArray.slice(0, trueLength);
 };
