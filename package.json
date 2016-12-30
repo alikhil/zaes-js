@@ -35,7 +35,6 @@
   "scripts": {
     "analyze-coverage": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --compilers js:babel-core/register",
     "send-coverage": "cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage",
-    "prepublish": "npm run test",
     "lint": "eslint .",
     "test": "mocha --compilers js:babel-core/register",
     "compile": "npm run lint && npm run test",
